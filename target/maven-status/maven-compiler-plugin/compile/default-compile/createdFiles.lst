@@ -1,1 +1,3 @@
-org/neo4j/example/p1.class
+myproc/p1$RelationshipTypes.class
+myproc/p1.class
+myproc/p1$Labels.class
