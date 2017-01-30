@@ -27,13 +27,13 @@ public class p1
     }
 
     public enum Labels implements Label {
-            USER,
+            node,
             MOVIE;
     }
 
 
-	//@UserFunction
-	@Procedure(value = "myproc.p1", mode = Mode.WRITE)
+	@UserFunction
+	//@Procedure(value = "myproc.p1", mode = Mode.WRITE)
 	@Description("myproc.p1(['s1','s2',...], delimiter) - join the given strings with the given delimiter.")
     public void p1(
             @Name("strings") List<String> strings,
@@ -42,32 +42,14 @@ public class p1
 		System.out.println("T01, here in the new procedure!");
         
 
-		// Create Nodes
-            Transaction tx = graphDB.beginTx();
-            Node steve = graphDB.createNode(Labels.USER);
-            steve.setProperty("name", "Steve");
-            Node tom = graphDB.createNode(Labels.USER);
-            tom.setProperty("name", "Tom");
-
-            Node divergent = graphDB.createNode(Labels.MOVIE);
-            divergent.setProperty("name", "Divergent");
-
-            tx.success();
-
-        // Create Relationship
-            tx = graphDB.beginTx();
-            steve.createRelationshipTo(tom, RelationshipTypes.IS_FRIEND_OF);
-            Relationship relationship = steve.createRelationshipTo(divergent, RelationshipTypes.HAS_SEEN);
-            tx.success();
-
         // Begin some search
             // Find all users
-            ResourceIterator<Node> users = graphDB.findNodes( Labels.USER );
-            System.out.println( "Users:" );
-            while( users.hasNext() )
+            ResourceIterator<Node> nodes = graphDB.findNodes( Labels.node );
+            System.out.println( "Nodes:" );
+            while( nodes.hasNext() )
             {
-                Node user = users.next();
-                System.out.println( "\t" + user.getProperty( "name" ) );
+                Node node = nodes.next();
+                System.out.println( "\t" + node.getProperty( "id" ) );
             }
 
 
