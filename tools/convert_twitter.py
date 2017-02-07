@@ -1,10 +1,11 @@
 import sys
+import re
 
 file_name = sys.argv[1]
 
 # read in each nodes
 print(file_name)
-node_file = 'node_' + file_name
+node_file = file_name + '.node'
 print(node_file)
 f_in = open(file_name, 'r')
 f_out = open(node_file, 'w')
@@ -19,8 +20,12 @@ for line in f_in:
 		f_out.write(str(b)+'\n')		
 		number_seen.add(b)
 # print to a file with _node.csv
-
-
+f_in.seek(0)
+text = f_in.read()
+f_in.close()
+f_in = open(file_name, 'w')
+text = re.sub(r' \t', ' ', text)
+f_in.write(text)
 
 f_in.close()
 f_out.close()
