@@ -22,18 +22,16 @@ public class p1
     public GraphDatabaseService graphDB;    
 
 	public enum RelationshipTypes implements RelationshipType {
-        IS_FRIEND_OF,
-        HAS_SEEN;
+    	connected;
     }
 
     public enum Labels implements Label {
-            node,
-            MOVIE;
+    	node;
     }
 
 
-	@UserFunction
-	//@Procedure(value = "myproc.p1", mode = Mode.WRITE)
+	//@UserFunction
+	@Procedure(value = "myproc.p1", mode = Mode.WRITE)
 	@Description("myproc.p1(['s1','s2',...], delimiter) - join the given strings with the given delimiter.")
     public void p1(
             @Name("strings") List<String> strings,
