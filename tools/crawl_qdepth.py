@@ -29,6 +29,10 @@ def ncq_plots(plot_title):
 
 if __name__ == '__main__':
 	print('crawling ncq from the output')
+	if (len(sys.argv)<2):
+		print('Usage: python crawl_qdepth.py [pdf_name]')
+	else:
+		test_name = sys.argv[1]
 	# read in
 	ncq_file = open('./ncq_depth_timeline.txt', 'r')
 	line_no  = 0
@@ -50,7 +54,7 @@ if __name__ == '__main__':
 		pid_list.append(int(io_list[6]))
 
 	ncq_data.close()
-	ncq_plots('ncq_shortestpath')
+	ncq_plots(test_name)
 	print('ncq: ')
 	print(str(ncq_depth_list))
 	print('pid: ')
