@@ -40,9 +40,9 @@ public class sp
 	//@UserFunction
 	@Procedure(value = "myproc.sp", mode = Mode.WRITE)
 	@Description("myproc.sp(['s1','s2',...], delimiter) - join the given strings with the given delimiter.")
-    public void sp(
-            @Name("strings") List<String> strings,
-            @Name(value = "delimiter", defaultValue = ",") String delimiter) {
+    public void sp(@Name("startnode") Long start_id, @Name("endnode") Long end_id){
+            //@Name("strings") List<String> strings,
+            //@Name(value = "delimiter", defaultValue = ",") String delimiter) {
 		
 		System.out.println("T01, here in the new procedure!");
         
@@ -59,13 +59,14 @@ public class sp
 			System.out.println("Hello, World!");	
 		*/
 		// find nodes according to ID
-			Node node_13 = graphDB.findNode(Labels.node, "id", 13);
-			Node node_1000 = graphDB.findNode(Labels.node, "id", 1000);
+			System.out.println(String.format("Start finding shortestpath from %d to %d", start_id, end_id));
+			Node node_start = graphDB.findNode(Labels.node, "id", start_id);
+			Node node_end = graphDB.findNode(Labels.node, "id", end_id);
 		// Try to get the shortestpath
 			PathExpander<Object> pathExpander = PathExpanders.allTypesAndDirections();
 			PathFinder<Path> shortestPath = GraphAlgoFactory.shortestPath(pathExpander,10);
         // find all paths between given two nodes
-			Path path_result = shortestPath.findSinglePath(node_13, node_1000);
+			Path path_result = shortestPath.findSinglePath(node_start, node_end);
 			Iterator<Node> nodes = path_result.nodes().iterator();
 			while (nodes.hasNext()){
 				Node next = nodes.next();
