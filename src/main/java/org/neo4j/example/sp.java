@@ -33,7 +33,7 @@ public class sp
     }
 
     public enum Labels implements Label {
-    	node;
+    	Node;
     }
 
 
@@ -60,8 +60,8 @@ public class sp
 		*/
 		// find nodes according to ID
 			System.out.println(String.format("Start finding shortestpath from %d to %d", start_id, end_id));
-			Node node_start = graphDB.findNode(Labels.node, "id", start_id);
-			Node node_end = graphDB.findNode(Labels.node, "id", end_id);
+			Node node_start = graphDB.findNode(Labels.Node, "id", start_id);
+			Node node_end = graphDB.findNode(Labels.Node, "id", end_id);
 		// Try to get the shortestpath
 			PathExpander<Object> pathExpander = PathExpanders.allTypesAndDirections();
 			PathFinder<Path> shortestPath = GraphAlgoFactory.shortestPath(pathExpander,10);
