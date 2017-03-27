@@ -42,10 +42,12 @@ public class readnodes_multithread
 			// set number
 		private int start, end;
 		private Thread t;
+		private int count;
 
 		Print_Thread(int st, int ed) {
 			start = st;
 			end = ed;
+			count = 0;
 		}
 
 		// start
@@ -61,14 +63,18 @@ public class readnodes_multithread
 	 		Transaction tx = graphDB.beginTx();
 			try
 			{
-				for(int node_id=start; node_id<end; node_id++ ) {
+				for(int node_id=start; node_id<=end; node_id+=1000) {
 					Node node_curr = graphDB.findNode(Labels.Node, "id", node_id);
-					node_id+=1000;
-			if (node_curr!=null) {
-            			System.out.println( "\n=== in thread " + start + " get: " + node_curr.getProperty( "id" ) );
-        		}
+					while (node_curr==null) {
+						node_id++;
+						node_curr = graphDB.findNode(Labels.Node, "id", node_id);
+					}
+					if (node_curr!=null) {
+            			count++;
+						System.out.println( "\n\n=== in thread " + start + " get: " + node_curr.getProperty( "id" ) );
+        			}
 				}
-         		System.out.println("!!!=== Thread " +  start + " exiting ===!!!");
+         		System.out.println("!!!=== Thread " +  start + " exiting with finding " + count + " ===!!!" );
 			} finally {
 				tx.success();
 			}
@@ -94,14 +100,16 @@ public class readnodes_multithread
         // read in some users
         System.out.println( "Nodes:" );
         int node_id = 14;
-		int number_nodes = 10000;
 			
 		// threads
-		Print_Thread t1 = new Print_Thread(14, 5000000);
+		Print_Thread t1 = new Print_Thread(14, 250000);
+		Print_Thread t2 = new Print_Thread(250001, 500000);
+		Print_Thread t3 = new Print_Thread(500001, 750000);
+		Print_Thread t4 = new Print_Thread(750001, 1000000);
 		t1.start();
-		
-		Print_Thread t2 = new Print_Thread(5000001, 10000000);
 		t2.start();
+		t3.start();
+		t4.start();
 		
 		return;
 	}

@@ -51,15 +51,19 @@ public class readnodes
         // read in some users
             System.out.println( "Nodes:" );
             int node_id = 14;
-	    int number_nodes = 10000;
-	    while( number_nodes > 0 )
+		int node_number = 0;		
+	    while( node_number <= 1000 )
       	{
 			Node node_curr = graphDB.findNode(Labels.Node, "id", node_id);
-			node_id+=1000;
+			while (node_curr==null) {
+				node_id++;
+				node_curr = graphDB.findNode(Labels.Node, "id", node_id);
+			}
 			if (node_curr!=null) {
-            			System.out.println( "\t" + node_curr.getProperty( "id" ) );
-        		}
-		number_nodes--;
+            	node_number++;
+				System.out.println( "\t" + node_curr.getProperty( "id" ) );
+        	}
+			node_id+=1000;
 		}
 		
 		return;
