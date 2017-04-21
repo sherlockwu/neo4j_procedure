@@ -13,10 +13,13 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphalgo.GraphAlgoFactory;
+import org.neo4j.graphalgo.CostEvaluator;
 import org.neo4j.graphdb.PathExpander;
 import org.neo4j.graphalgo.PathFinder;
 import org.neo4j.graphdb.PathExpanders;
 import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphalgo.*;
 
 import org.neo4j.procedure.*;
 
@@ -64,8 +67,14 @@ public class sp
 			Node node_end = graphDB.findNode(Labels.Node, "id", end_id);
 		// Try to get the shortestpath
 			PathExpander<Object> pathExpander = PathExpanders.allTypesAndDirections();
-			PathFinder<Path> shortestPath = GraphAlgoFactory.shortestPath(pathExpander,10);
-        // find all paths between given two nodes
+			//PathFinder<Path> shortestPath = GraphAlgoFactory.shortestPath(pathExpander,10);
+			CostEvaluator<Double> costevaluator = new CostEvaluator<Double>(){
+				public Double getCost( Relationship relationship, Direction direction) {
+					return 1.0;
+				}
+			};
+			PathFinder<WeightedPath> shortestPath = GraphAlgoFactory.dijkstra(pathExpander,costevaluator);
+	// find all paths between given two nodes
 			Path path_result = shortestPath.findSinglePath(node_start, node_end);
 			Iterator<Node> nodes = path_result.nodes().iterator();
 			while (nodes.hasNext()){
